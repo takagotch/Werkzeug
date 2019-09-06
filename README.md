@@ -169,14 +169,32 @@ class DebugReprGenerator(object):
     return u'<span class="object">%s</span>' % escape(r)
     
   def dispatch_repr(self, obj, recursive):
-    if obj is helper:
-      return u'' % helper
-    if isinstance():
-      return u'' % obj
-    if isinstance():
-      return self.string_repr()
-    if isinstance():
-      return self.list_repr()
+      if obj is helper:
+            return u'<span class="help">%r</span>' % helper
+        if isinstance(obj, (integer_types, float, complex)):
+            return u'<span class="number">%r</span>' % obj
+        if isinstance(obj, string_types) or isinstance(obj, bytes):
+            return self.string_repr(obj)
+        if isinstance(obj, RegexType):
+            return self.regex_repr(obj)
+        if isinstance(obj, list):
+            return self.list_repr(obj, recursive)
+        if isinstance(obj, tuple):
+            return self.tuple_repr(obj, recursive)
+        if isinstance(obj, set):
+            return self.set_repr(obj, recursive)
+        if isinstance(obj, frozenset):
+            return self.frozenset_repr(obj, recursive)
+        if isinstance(obj, dict):
+            return self.dict_repr(obj, recursive)
+        if deque is not None and isinstance(obj, deque):
+            return self.deque_repr(obj, recursive)
+      return self.list_repr(obj, recursive)
+
+
+
+    if isinstance(ojb, dict):
+      return self.list_repr(obj, recursive)
     return self.object_repr(obj)
     
   def fallback_repr(self):
@@ -245,13 +263,6 @@ class DebugReprGenerator(object):
           "repr": "<pre class=repr>%s</pre>" % repr if repr else "",
           "items": "\n".join(html_items),
         }
-            
-            
-    
-        
-        
-    
-
 ```
 
 ```
